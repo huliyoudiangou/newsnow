@@ -1,4 +1,8 @@
 {
+  "name": "news",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.5.2",
  "scripts": {
     "dev": "npm run presource && vite dev",
     "build": "npm run presource && vite build",
