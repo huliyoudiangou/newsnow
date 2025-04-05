@@ -1,15 +1,27 @@
-version: '3'
+version: '3' 
 
 services:
   newsnow:
-    image: ghcr.io/ourongxing/newsnow:latest
+    build: .  # 关键修改：从使用镜像改为本地构建
     container_name: newsnow
-    restart: always
+    restart: unless-stopped  # 比always更智能的重启策略
     ports:
-      - '4444:4444'
+      - "4566:4444"  # 保持原有端口映射
     environment:
-      - G_CLIENT_ID=
-      - G_CLIENT_SECRET=
-      - JWT_SECRET=
-      - INIT_TABLE=true
-      - ENABLE_CACHE=true
+      - G_CLIENT_ID=${G_CLIENT_ID}        # 建议转移到.env文件
+      - G_CLIENT_SECRET=${G_CLIENT_SECRET}
+      - JWT_SECRET=${JWT_SECRET}
+      - INIT_TABLE=${INIT_TABLE:-true}    # 设置默认值
+      - ENABLE_CACHE=${ENABLE_CACHE:-true}
+    volumes:
+      - ./logs:/app/logs  # 新增日志持久化
+    # 可根据需要添加资源限制：
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1.0'
+    #       memory: 2G
+
+# 如果项目包含数据库等组件需添加对应服务
+# volumes:
+#   newsnow-data:  # 示例数据卷声明
